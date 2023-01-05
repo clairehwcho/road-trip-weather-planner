@@ -11,7 +11,7 @@ When the webpage is initialized, the user is presented with a landing page which
 <br>
 You can check out the deployed application from the link below:
 <br>
-[https://jenjen0219.github.io/road-trip-weather-planner/](https://jenjen0219.github.io/road-trip-weather-planner/)
+[https://clairehwcho.github.io/road-trip-weather-planner/](https://clairehwcho.github.io/road-trip-weather-planner/)
 
 <!-- omit in toc -->
 ## Table of Contents

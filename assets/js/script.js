@@ -10,7 +10,6 @@ const clearStorageBtn = document.querySelector("#clear-storage-btn");
 const clearContentBtn = document.querySelector("#clear-content-btn");
 const emailContainer = document.querySelector(".email-container");
 const emailFormEl = document.querySelector(".email-form");
-const emailInputVal = document.querySelector("#email-address").value;
 const emailBtn = document.querySelector("#email-btn");
 
 // Populate the list of autocomplete options for city input.
@@ -50,8 +49,6 @@ const handleStateOptions = function () {
 // The insertInputRow function creates a new input row in the form.
 const insertInputRow = function (event) {
     event.preventDefault();
-
-    console.log("test");
 
     const inputRowEl = document.querySelectorAll(".input-row");
 
@@ -161,7 +158,6 @@ const resetForm = function (event) {
 const getRecentSearchFromStorage = function () {
     const recentSearchArr = localStorage.getItem('recent-search');
     const storedArr = JSON.parse(recentSearchArr);
-    console.log("Search history found from local storage");
     return storedArr;
 };
 
@@ -186,7 +182,6 @@ const storeSearchToStorage = function (dateInputVal, cityInputVal, stateInputVal
         recentSearchArr.push(newSearchObj);
         localStorage.setItem("recent-search", JSON.stringify(recentSearchArr));
     }
-    console.log("Search history stored in local storage");
 };
 
 // The handleStorageButtons function removes the disabled attribute from the recent search button and the delete search history button if there is stored data in local storage.
@@ -206,7 +201,6 @@ const showRecentSearch = async function () {
         weatherForecastContainer.innerHTML = "";
 
         const recentSearchArr = getRecentSearchFromStorage();
-        console.log(recentSearchArr);
 
         for (let i = 0; i < recentSearchArr.length; i++) {
             const currentDayObj = recentSearchArr[i];
@@ -268,20 +262,15 @@ const getCityWeather = async function (dateInputVal, cityInputVal, stateInputVal
         const requestURL = 'https://dark-sky.p.rapidapi.com/' + coordinate + ',' + dateForURL + '?units=uk2';
 
         const response = await fetch(requestURL, options);
-        console.log(response);
         if (!response.ok) {
             console.error(error);
         };
         const data = await response.json();
-        console.log(data);
 
         const tempMin = Math.round((data.daily.data[0].temperatureMin * 9 / 5) + 32);
         const tempMax = Math.round((data.daily.data[0].temperatureMax * 9 / 5) + 32);
         const humidity = data.daily.data[0].humidity * 100;
         const windSpeed = data.daily.data[0].windSpeed;
-
-        console.log(dateObj);
-        console.log(formattedDate);
 
         weatherForecastContainer.innerHTML +=
             `
@@ -318,12 +307,10 @@ const getCityWeather = async function (dateInputVal, cityInputVal, stateInputVal
             const requestURL = 'https://dark-sky.p.rapidapi.com/' + coordinate + ',' + dateForURL + '?units=uk2';
 
             const response = await fetch(requestURL, options);
-            console.log(response);
             if (!response.ok) {
                 console.error(error);
             };
             const data = await response.json();
-            console.log(data);
 
             const tempMin = Math.round((data.daily.data[0].temperatureMin * 9 / 5) + 32);
             const tempMax = Math.round((data.daily.data[0].temperatureMax * 9 / 5) + 32);
@@ -353,12 +340,10 @@ const getCityCoordinates = async function (dateInputVal, cityInputVal, stateInpu
     const requestUrl = 'https://api.openweathermap.org/geo/1.0/direct?q=' + cityInputVal + ',' + stateInputVal + ',US&appid=' + APIKey;
 
     const response = await fetch(requestUrl);
-    console.log(response);
     if (!response.ok) {
         console.error(error);
     }
     const data = await response.json();
-    console.log(data);
 
     const latCoord = data[0].lat;
     const lonCoord = data[0].lon;
@@ -409,28 +394,40 @@ const clearWeatherData = function (event) {
 }
 
 // The insertInputRow function is called when the add stop button is clicked.
-addStopBtn.addEventListener("click", function (event) {
-    insertInputRow(event);
-    handleStateOptions();
-});
+if (addStopBtn) {
+    addStopBtn.addEventListener("click", function (event) {
+        insertInputRow(event);
+        handleStateOptions();
+    });
+};
 
 // The resetForm function is called when the reset form button is clicked.
-resetBtn.addEventListener("click", function (event) {
-    resetForm(event);
-    handleStateOptions();
-});
+if (resetBtn) {
+    resetBtn.addEventListener("click", function (event) {
+        resetForm(event);
+        handleStateOptions();
+    });
+};
 
 // The handleSubmit function is called when the save button is clicked.
-saveBtn.addEventListener("click", handleSubmit);
+if (saveBtn) {
+    saveBtn.addEventListener("click", handleSubmit);
+};
 
 // The getRecentSearch function is called when the recent search button is clicked.
-recentSearchBtn.addEventListener("click", showRecentSearch);
+if (recentSearchBtn) {
+    recentSearchBtn.addEventListener("click", showRecentSearch);
+};
 
 // The clearStorage function is called when the delete search history button is clicked.
-clearStorageBtn.addEventListener("click", clearStorage);
+if (clearStorageBtn) {
+    clearStorageBtn.addEventListener("click", clearStorage);
+};
 
 // The clearWeatherData function is called when the clear button is clicked.
-clearContentBtn.addEventListener("click", clearWeatherData);
+if (clearContentBtn) {
+    clearContentBtn.addEventListener("click", clearWeatherData);
+};
 
 // Run autocomplete functionality for city input on page load.
 document.addEventListener('DOMContentLoaded', getCityAutocomplete);
@@ -439,4 +436,6 @@ document.addEventListener('DOMContentLoaded', getCityAutocomplete);
 handleStateOptions();
 
 // Handle disabled attribute for recent search button and delete search history on page load.
-handleStorageButtons();
+if (recentSearchBtn && clearStorageBtn) {
+    handleStorageButtons();
+};
